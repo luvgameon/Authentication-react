@@ -1,10 +1,13 @@
 import { useState, useRef, useContext} from 'react';
 import AuthContext from '../../store/auth-context';
+import { useHistory } from 'react-router-dom';
+
 
 
 import classes from './AuthForm.module.css';
 
 const AuthForm = () => {
+  const history=useHistory();
   const emailref=useRef();
   const pasref=useRef();
   const authctx=useContext(AuthContext);
@@ -39,7 +42,18 @@ const AuthForm = () => {
         );
         const data = await respose.json();
         authctx.login(data.idToken)
-        console.log(data.idToken)
+        if(data.idToken){
+        history.replace('/');
+        }
+        if(!respose.ok)
+        {
+         
+         
+          alert(data.error.message);
+            
+
+        }
+        
 
     }
     else{
@@ -68,8 +82,7 @@ const AuthForm = () => {
       
     }
     setIsloading(false);
-    
-
+  
   }
  
 
@@ -92,8 +105,8 @@ const AuthForm = () => {
         </div>
         
        <div className={classes.actions}>
-          {!Isloading&&<button onClick={submithandler}>{isLogin ? 'Login' : 'Sign Up'}</button>}
-          {Isloading&&<p>Sendind Request...</p>}
+         {!Isloading&&<button onClick={submithandler}>{isLogin ? 'Login' : 'Sign Up'}</button>}
+          {Isloading&&<p>Sending Request...</p>}
          
           <button
             type='button'
@@ -104,6 +117,7 @@ const AuthForm = () => {
           </button>
         </div>
       </form>
+     
     </section>
   );
 };
