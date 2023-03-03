@@ -41,8 +41,10 @@ const AuthForm = () => {
         }
         );
         const data = await respose.json();
-        authctx.login(data.idToken)
-        if(data.idToken){
+        
+        localStorage.setItem('id', data.idToken);
+        authctx.login(localStorage.getItem('id'));
+        if(localStorage.getItem('id')){
         history.replace('/');
         }
         if(!respose.ok)
